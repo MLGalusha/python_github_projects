@@ -6,6 +6,8 @@ from fighter_jet_settings import Settings
 
 from fighter_jet import FighterJet
 
+from fighter_bullets import Bullet
+
 class FighterJetGame:
 
     def __init__(self):
@@ -18,13 +20,32 @@ class FighterJetGame:
         pygame.display.set_caption("Mr. Fighter Jet")
 
         self.fighter_jet = FighterJet(self)
+        self.bullets = pygame.sprite.Group()
 
     def run_game(self):
         while True:
             self._check_events()
-            self._update_events()
             self.fighter_jet.update()
+            self._update_bullets()
+            self._update_events()
             self.clock.tick(60)
+    
+    def _update_bullets(self):
+
+        self.bullets.update()
+        #Get rid of bullets that have disappeared
+        for bullet in self.bullets.copy():
+            if bullet.rect.left >= self.fighter_jet.screen_rect.right:
+                self.bullets.remove(bullet)
+
+    def _update_events(self):
+        self.screen.fill(self.settings.bg_colors)
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullets()
+        self.fighter_jet.blitme()
+
+        pygame.display.flip()
+
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -42,6 +63,14 @@ class FighterJetGame:
             self.fighter_jet.moving_down = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
+    
+    def _fire_bullet(self):
+        #create a new bullet and add it to the bullets group
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
             
     def _check_keyup_events(self, event):
         if event.key == pygame.K_w:
@@ -49,12 +78,6 @@ class FighterJetGame:
         elif event.key == pygame.K_s:
             self.fighter_jet.moving_down = False
 
-
-    def _update_events(self):
-        self.screen.fill(self.settings.bg_colors)
-        self.fighter_jet.blitme()
-
-        pygame.display.flip()
 
 if __name__ == '__main__':
     ai = FighterJetGame()
