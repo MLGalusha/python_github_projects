@@ -6,5 +6,15 @@ class Settings:
         self.screen_height = 800
         self.bg_colors = (50, 200, 255)
 
-        self.jet_speed = 5
+        #ship settings
+        self.jet_speed = 4
+
+        #bullet settings
+        self.bullet_speed = 8.0
+        self.bullet_width = 15.0
+        self.bullet_height = 3.0
+        self.bullet_color = (255, 50, 50)
+        self.bullets_allowed = 10
+
+
         
