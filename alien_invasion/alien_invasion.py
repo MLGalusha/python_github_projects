@@ -4,7 +4,7 @@ import pygame
 
 from alien_settings import Settings
 
-from good_ship_alien_invasion import Ship
+from ship import Ship
 
 from bullet import Bullet
 
