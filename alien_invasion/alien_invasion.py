@@ -8,6 +8,8 @@ from ship import Ship
 
 from bullet import Bullet
 
+from alien import Alien
+
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -22,7 +24,7 @@ class AlienInvasion:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         
-        # We are using fullscreen but here is what we started with
+        # # We are using fullscreen but here is what we started with
         # self.screen = pygame.display.set_mode(
         #     (self.settings.screen_width, self.settings.screen_height))
 
@@ -30,6 +32,28 @@ class AlienInvasion:
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+
+        self._create_fleet()
+    
+    def _create_fleet(self):
+        #Create the fleet of aliens
+        # Create an alien and keep adding aliens until there's no room left.
+        # Spacing between aliens is one alien width.
+        alien = Alien(self)
+        alien_width = alien.rect.width
+
+        current_x = alien_width
+        while current_x < (self.settings.screen_width - 2 * alien_width):
+            self._create_alien(current_x)
+            current_x += 2 * alien_width
+
+    def _create_alien(self, x_position):
+        #create an alien and place it into the row
+        new_alien = Alien(self)
+        new_alien.x = x_position
+        new_alien.rect.x = x_position
+        self.aliens.add(new_alien)
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -55,6 +79,9 @@ class AlienInvasion:
         self.screen.fill(self.settings.bg_color)
         for bullet in self.bullets.sprites():
             bullet.draw_bullets()   
+        
+        self.aliens.draw(self.screen)
+
         self.ship.blitme()
 
         pygame.display.flip()
