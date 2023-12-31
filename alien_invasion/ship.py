@@ -11,7 +11,11 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
 
         # Load the ship image and get its rect.
-        self.image = pygame.image.load('/Users/masongalusha/Desktop/python_work/zz-assets/good_spaceship_alien_invasion.png')
+        og_image = pygame.image.load('/Users/masongalusha/Desktop/python_work/zz-assets/good_spaceship_alien_invasion.png')
+        og_width = 50
+        og_height = 50
+
+        self.image = pygame.transform.scale(og_image, (og_width, og_height))
         self.rect = self.image.get_rect()
 
         # Start each new ship at the bottom center of the screen.
