@@ -20,13 +20,14 @@ class AlienInvasion:
         self.clock = pygame.time.Clock()
         self.settings = Settings()
 
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height
+        # create fullscreen display
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.settings.screen_width = self.screen.get_rect().width
+        # self.settings.screen_height = self.screen.get_rect().height
         
         # # We are using fullscreen but here is what we started with
-        # self.screen = pygame.display.set_mode(
-        #     (self.settings.screen_width, self.settings.screen_height))
+        self.screen = pygame.display.set_mode(
+            (self.settings.screen_width, self.settings.screen_height))
 
         pygame.display.set_caption("Alien Invasion")
 
@@ -44,13 +45,13 @@ class AlienInvasion:
         alien_width, alien_height = alien.rect.size
 
         current_x, current_y = alien_width, alien_height
-        while current_y < (self.settings.screen_height - 3 * alien_height):
+        while current_y < (self.settings.screen_height - 15 * alien_height):
             while current_x < (self.settings.screen_width - 2 * alien_width):
                 self._create_alien(current_x, current_y)
                 current_x += 2 * alien_width
                 
-                current_x += alien_width
-                current_y += 2 * alien_height
+            current_x = alien_width
+            current_y += 2 * alien_height
 
 
     def _create_alien(self, x_position, y_position):
@@ -59,7 +60,6 @@ class AlienInvasion:
         new_alien.x = x_position
         new_alien.rect.x = x_position
         new_alien.rect.y = y_position
-
         self.aliens.add(new_alien)
 
     def run_game(self):
@@ -69,9 +69,13 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
 
+    def _update_aliens(self):
+        # Update the position of all of the aliens in the fleet
+        self.aliens.update()
           
     def _update_bullets(self):
 
