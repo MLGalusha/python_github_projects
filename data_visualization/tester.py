@@ -1,16 +1,32 @@
+from pathlib import Path
+import csv
+from datetime import datetime
 import matplotlib.pyplot as plt
 
-# Example lists of x and y values
-x_values = [1, 2, 3, 4, 5]
-y_values = [10, 8, 5, 2, 7]
+path = Path('/Users/masongalusha/Desktop/python_work/zz-assets/data.csv')
+lines = path.read_text().splitlines()
 
-# Plot the points
-plt.plot(x_values, y_values, marker='o', linestyle='-', color='b')
+reader = csv.reader(lines)
+header_row = next(reader)
 
-# Add labels and title
-plt.xlabel('X Values')
-plt.ylabel('Y Values')
-plt.title('Scatter Plot of X and Y Values')
+# Extract dates and high temperatures.
+dates, highs = [], []
+for row in reader:
+    current_date = datetime.strptime(row[2], '%Y-%m-%d')
+    high = int(row[4])
+    dates.append(current_date)
+    highs.append(high)
 
-# Show the plot
+# Plot the high temperatures.
+plt.style.use('dark_background')
+fig, ax = plt.subplots()
+ax.plot(dates, highs, color='red')
+
+# Format plot.
+ax.set_title("Daily High Temperatures, July 2021", fontsize=24)
+ax.set_xlabel('', fontsize=16)
+fig.autofmt_xdate()
+ax.set_ylabel("Temperature (F)", fontsize=16)
+ax.tick_params(labelsize=16)
+
 plt.show()
